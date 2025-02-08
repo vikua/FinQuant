@@ -940,7 +940,7 @@ def _yfinance_request(
     # unlike quandl, yfinance does not have a prefix in front of the ticker
     # thus we do not need to correct them
     try:
-        resp: pd.DataFrame = yfinance.download(names, start=start_date, end=end_date)
+        resp: pd.DataFrame = yfinance.download(names, start=start_date, end=end_date, auto_adjust=False)
         if not isinstance(resp.columns, pd.MultiIndex) and len(names) > 0:
             # for single stock must make the dataframe multiindex
             stock_tuples = [(col, names[0]) for col in list(resp.columns)]
@@ -1208,7 +1208,7 @@ def _build_portfolio_from_df(
     if pf_allocation is None:
         pf_allocation = _generate_pf_allocation(data=data)
     if data_columns is None:
-        data_columns = ["Adj. Close"]
+        data_columns = ["Adj Close"]
     # Enforcing types for pf_allocation:
     pf_allocation = pf_allocation.astype({"Allocation": np.float64, "Name": str})
     # make sure stock names are in data dataframe
